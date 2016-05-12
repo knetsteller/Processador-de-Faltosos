@@ -25,17 +25,26 @@ import java.io.File;
 import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooserBuilder;
 
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.layout.HBox;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 public class Processador extends Application {
 
     ObservableList<String> turmaDeAlunos;
     ListView<String> alunosFaltosos;
     GridPane gridPane;
+    ProcessadorJson processadorJson;
+    JSONObject jSONObject;
 
     public static void main(String[] args) {
         launch(args);
@@ -50,6 +59,15 @@ public class Processador extends Application {
 
         final Clipboard clipboard = Clipboard.getSystemClipboard();
         final ClipboardContent content = new ClipboardContent();
+        
+        HBox painelMenu = new HBox();
+        MenuBar  barraMenu = new MenuBar();
+        Menu menuFerramentas = new Menu("Ferramentas");
+        MenuItem formataItemMenu = new MenuItem("Formata Arquivo");
+        barraMenu.getMenus().add(menuFerramentas);
+        menuFerramentas.getItems().add(formataItemMenu);
+        painelMenu.getChildren().add(barraMenu);
+        root.setTop(painelMenu);
 
         gridPane = new GridPane();
         gridPane.setPadding(new Insets(15));
@@ -70,6 +88,22 @@ public class Processador extends Application {
         botaoCarregaArquivo.setMaxWidth(Double.MAX_EXPONENT);
         painelBotoes.getChildren().addAll(botaoCarregaArquivo, botaoAdiciona, botaoClipBoard);
 
+        formataItemMenu.setOnAction((ActionEvent event) -> {
+            final Stage link = innerStage;
+            String currentDir = System.getProperty("user.dir") + File.separator;
+            StringBuilder sb = null;
+            jSONObject = new JSONObject();
+            ArrayList<String> alunos = new ArrayList<>();
+            processadorJson = new ProcessadorJson();
+
+            FileChooserBuilder fcb = FileChooserBuilder.create();
+            FileChooser fc = fcb.title("Open Dialog").initialDirectory(new File(currentDir)).build();
+            File selectedFile = fc.showOpenDialog(link);
+            if (selectedFile != null) {
+                processadorJson.converteCsvParaJson(selectedFile);
+            }        
+        });
+        
         botaoAdiciona.setOnAction((ActionEvent event) -> {
             String potencial = alunosFaltosos.getSelectionModel().getSelectedItem();
             StringBuilder dadosAluno = null;
