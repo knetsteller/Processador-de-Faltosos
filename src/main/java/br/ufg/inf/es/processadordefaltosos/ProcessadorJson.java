@@ -38,13 +38,14 @@ public class ProcessadorJson {
         for (int i = 0; i < listaAlunos.size(); i++) {
             objetoJson = new JSONObject();
             
-            matriculaAluno = listaAlunos.get(i).get(0);
-            nomeAluno = listaAlunos.get(i).get(1);
-            nomeMae = listaAlunos.get(i).get(2);
-            rua = listaAlunos.get(i).get(3);
-            quadra = listaAlunos.get(i).get(4);
-            lote = listaAlunos.get(i).get(5);
-            bairro = listaAlunos.get(i).get(6);
+            matriculaAluno = listaAlunos.get(i).get(0).trim();
+            nomeAluno = listaAlunos.get(i).get(1).trim();
+            System.out.println(nomeAluno);
+            nomeMae = listaAlunos.get(i).get(2).trim();
+            rua = listaAlunos.get(i).get(3).trim();
+            quadra = listaAlunos.get(i).get(4).trim();
+            lote = listaAlunos.get(i).get(5).trim();
+            bairro = listaAlunos.get(i).get(6).trim();
             telefone = "";
             
             objetoJson.put("Matricula", matriculaAluno);
@@ -56,19 +57,17 @@ public class ProcessadorJson {
             objetoJson.put("Bairro", bairro);
             objetoJson.put("Telefone", telefone);
             
-            arrayJson.add(objetoJson);
+            arrayJson.add(objetoJson);            
         }
 
         try {
             FileOutputStream fos = new FileOutputStream(new File("C:\\Prototypes\\alunos_dados_completo.json"));
             OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
-            //FileWriter file = new FileWriter("c:\\Prototypes\\alunos.json");
             osw.write(arrayJson.toJSONString());
             osw.flush();
             osw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }    
 }

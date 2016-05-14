@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +29,7 @@ public class ReadCSV {
         String csvSplitBy = ";";
 
         try {
-            //br = new BufferedReader(new FileReader(file));
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF8"));
             while ((line = br.readLine()) != null) {
                 String[] nomes = line.split(csvSplitBy);
                 listaNomes.add(nomes[1]);
@@ -53,13 +53,14 @@ public class ReadCSV {
 
     public static List<ArrayList<String>> resgataAtributos(File file) {
         List<ArrayList<String>> listaAlunos = new ArrayList<>(40);
+        Charset inputCharset = Charset.forName("ISO-8859-1");
         
         BufferedReader br = null;
         String line = "";
         String csvSplitBy = ";";
 
         try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(file), inputCharset));
             while ((line = br.readLine()) != null) {
                 String[] nomes = new String[8];
                 nomes = line.split(csvSplitBy);
